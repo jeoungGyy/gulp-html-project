@@ -1,0 +1,140 @@
+:root { font-size: 15px;}
+
+html,body,div,span,iframe,h1,h2,h3,h4,h5,h6,p,pre,a,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strong,sub,sup,var,b,u,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td, header, article, section, aside, nav, figure, figcaption, adress, textarea, input[type=text], input[type=password], input[type=file] {
+	margin:0;
+	padding:0;
+	vertical-align:baseline;
+	background:transparent;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+}
+
+body {
+	font-family: "Malgun Gothic","맑은 고딕","Helvetica Neue","Apple SD Gothic Neo",sans-serif;
+	font-size: 15px;
+	color:#000;
+	line-height: 1;
+}
+
+a:link,
+a:visited { color:#000; text-decoration:none;}
+
+select { font-size:100%; vertical-align:middle; background-color:#fff;}
+select[disabled] { background-color: #ccc;}
+
+input[type=submit] { border:0; cursor:pointer; -webkit-appearance: none;}
+input[type=checkbox] { border:1px solid #ddd;}
+input[type=checkbox], input[type=radio]  {
+	width:19px;
+	height:19px;
+	margin-top:-1px;
+	vertical-align:middle;
+}
+input[type=file], input[type=text], input[type=password] {
+	padding:0 3px;
+	font-size:100%;
+	vertical-align:middle;
+	border:1px solid #ddd;
+	background-color:#fff;
+	-webkit-appearance: none;
+}
+input[type=text]:focus, input[type=password]:focus {
+	background-color:#ecf9ff;
+}
+input[readonly],
+input[disabled] { background-color:#ccc;}
+
+button {
+	border:0 none;
+	padding:0;
+	margin:0;
+	font-size:100%;
+	color:#000;
+	vertical-align:middle;
+	background:transparent;
+	cursor:pointer;
+}
+button::-moz-focus-inner {
+	margin: -1px;
+	padding: 0;
+}
+
+ul, ol {
+	list-style:none;
+}
+
+address,caption,cite,code,dfn,var,em {
+	font-style:normal;
+	font-weight:normal;
+}
+
+textarea {
+	width:100%;
+	padding:5px;
+	font-size:100%;
+	border:1px solid #ddd;
+	background-color:#fff;
+	border-radius:0;
+	resize:none;
+	-webkit-appearance: none;
+	-webkit-border-radius:0;
+}
+textarea[disabled],
+textarea[readonly]  { background-color:#ccc;}
+
+fieldset,img {
+	border:0;
+}
+
+legend {
+	width:0;
+	height:0;
+	overflow:hidden;
+	margin:0;
+	padding:0;
+	visibility:hidden;
+	font-size:0;
+	line-height:0;
+}
+.ellipsis { overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+/* clear */
+.clearfix::after { content:'.'; display:block; clear:both; visibility:hidden; height:0;}
+* html .clearfix {
+	height:1%;
+}
+.hidden {
+	display:none;
+}
+.visible {
+	position:absolute;
+	top:-9999px;
+	width:0;
+	height:0;
+	overflow:hidden;
+	margin:0;
+	padding:0;
+	visibility:hidden;
+	font-size:0;
+	line-height:0;
+}
+
+/* Table */
+caption {
+	width: 0;
+	height: 0;
+	overflow: hidden;
+	padding: 0;
+	visibility: hidden;
+	font-size: 0;
+	line-height: 0;
+}
+table {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+	empty-cells:show;
+}
+table th,
+table td { vertical-align: middle;}

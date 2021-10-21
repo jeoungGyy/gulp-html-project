@@ -1,0 +1,16 @@
+{% set pageTitle = "IA" %}
+{% extends "./src/html/inc/layout.html" %}
+{% block content %}
+<style>
+table { width: 100%;}
+table th, table td { border: 1px solid #000;}
+.iaHeader { display: flex;}
+</style>
+<header class="iaHeader">
+  <h1>프로젝트 IA</h1>
+  <div>
+    총 489페이지 완료 : 468페이지 완료률 : 95%
+  </div>
+</header>
+{% include "./guide/inc/ia.html" %}
+{% endblock %}
