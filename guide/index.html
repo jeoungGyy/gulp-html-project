@@ -1,16 +1,23 @@
-{% set pageTitle = "IA" %}
-{% extends "./src/html/inc/layout.html" %}
-{% block content %}
-<style>
-table { width: 100%;}
-table th, table td { border: 1px solid #000;}
-.iaHeader { display: flex;}
-</style>
-<header class="iaHeader">
-  <h1>프로젝트 IA</h1>
-  <div>
-    총 489페이지 완료 : 468페이지 완료률 : 95%
-  </div>
-</header>
-{% include "./guide/inc/ia.html" %}
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>프로젝트 IA</title>
+  <style>
+    table { width: 100%;}
+    table th, table td { border: 1px solid #000;}
+    .iaHeader { display: flex; justify-content: space-between; align-items: center;}
+  </style>
+</head>
+<body>
+  <header class="iaHeader">
+    <h1>프로젝트 IA</h1>
+    <div>
+      총 489페이지 완료 : 468페이지 완료률 : 95%
+    </div>
+  </header>
+  {% include "./guide/inc/ia.html" %}
+</body>
+</html>

@@ -1,29 +1,30 @@
 'use strict';
 
 // Modules 호출
-var gulp = require('gulp');
+const gulp = require('gulp');
 
 // Gulp 의 concat 패키지 모듈 호출 - 자바스크립트 파일을 하나의 파일로 병합해 주는 플러그인입니다.
 // 파일 간의 병합이 알파벳 순서대로 병합되기 때문에 스크립트 처리 순서에 이슈가 발생할 수 있을 것입니다.
-var concat = require('gulp-concat');
+const concat = require('gulp-concat');
 
 // 주석, 공백 등을 제거하고, 변수명을 짧게 바꾸는 등의 작업을 통해 파일 용량을 줄여주는 플러그인
-var uglify = require('gulp-uglify');
+const uglify = require('gulp-uglify');
+const minificss = require('gulp-minify-css');
 
-var rename = require('gulp-rename');
+const rename = require('gulp-rename');
 
-var sourcemaps = require('gulp-sourcemaps');
+const scss = require('gulp-sass')(require('sass'));
 
-// var scss = require('gulp-sass');
-var scss = require('gulp-sass')(require('sass'));
-
-var browserSync = require('browser-sync').create();
+const browserSync = require('browser-sync').create();
 
 // 템플릿 페이지를 사용하게 해주는 플러그인
-var nunjucksRender = require('gulp-nunjucks-render');
+const nunjucksRender = require('gulp-nunjucks-render');
 
 const postcss = require('gulp-postcss');
 const pxtorem = require('postcss-pxtorem');
+
+const babel = require('gulp-babel');
+
 
 
 /**
@@ -31,8 +32,8 @@ const pxtorem = require('postcss-pxtorem');
  * 경로들을 담을 객체 생성
  * ==========================
  */
-var src = './src';
-var dist = './dist';
+var src = 'src';
+var dist = 'dist';
 var paths = {
 	js: src + './src/js/**/*.js',
 	scss: src + './src/sass/**/*.scss',
@@ -48,6 +49,16 @@ const plugins = [
 	})
 ];
 
+const manageEnvironment = (environment) => {
+	environment.addFilter('tabIndent', (str, numOfIndents, firstLine) => {
+		str = str.replace(/^(?=.)/gm, new Array(numOfIndents + 1).join('\t'));
+		if (!firstLine) {
+			str = str.replace(/^\s+/, "");
+		}
+		return str;
+	});
+};
+
 /**
  * ==========================
  * @task : HTML 반영
@@ -55,12 +66,12 @@ const plugins = [
  */
 gulp.task('html', function() {
 	return gulp
-		.src('./src/html/**/*.html')
+		.src('src/html/**/*.html')
 		.pipe(nunjucksRender({
 			envOptions: {
 				autoescape: false
 			},
-			// manageEnv: manageEnvironment,
+			manageEnv: manageEnvironment,
 			path: ['./']
 		}))
 		.pipe(gulp.dest('./dist/html'))
@@ -76,7 +87,10 @@ gulp.task('html', function() {
  */
 gulp.task('js:combine', function() {
 	return gulp
-		.src('./src/js/**/*.js') // js 하위 디렉터리 내의 모든 자바스크립트 파일을 가져온다.
+		.src('src/js/**/*.js') // js 하위 디렉터리 내의 모든 자바스크립트 파일을 가져온다.
+		.pipe(babel({
+			presets: ['@babel/env']
+		}))
 		.pipe(concat('conbined.js'))
 		.pipe(gulp.dest(dist+'/js')) // 저장 경로 지정
 		// 파일을 병합 후 uglify를 수행한다.
@@ -132,17 +146,14 @@ var scssOption = {
 gulp.task('scss:compile', function() {
 	return gulp
 		// SCSS 파일을 읽어온다.
-		.src('./src/sass/**/*.scss')
-		.pipe(concat('style.css'))
-		// 소스맵 초기화(소스맵을 생성)
-		.pipe(sourcemaps.init())
+		.src('src/sass/**/*.scss', { sourcemaps: true })
 		// SCSS 함수에 옵션갑을 설정, SCSS 작성시 watch 가 멈추지 않도록 logError 를 설정
 		.pipe(scss(scssOption).on('error', scss.logError))
-		// 위에서 생성한 소스맵을 사용한다.
-		.pipe(sourcemaps.write())
-		// 목적지(destination)을 설정
+		.pipe(minificss())
+		.pipe(concat('style.css'))
 		.pipe(postcss(plugins))
-		.pipe(gulp.dest(dist + '/css'))
+		// 목적지(destination)을 설정
+		.pipe(gulp.dest(dist + '/css', { sourcemaps: './' }))
 		.pipe(browserSync.reload({stream: true}));
 });
 
@@ -167,12 +178,12 @@ gulp.task('scss:compile', function() {
  */
  gulp.task('html:index', function() {
 	return gulp
-		.src('./guide/**/*.html')
+		.src('guide/**/*.html')
 		.pipe(nunjucksRender({
 			envOptions: {
 				autoescape: false
 			},
-			// manageEnv: manageEnvironment,
+			manageEnv: manageEnvironment,
 			path: ['./']
 		}))
 		.pipe(gulp.dest('./'))
@@ -187,10 +198,10 @@ gulp.task('scss:compile', function() {
 gulp.task('watch', function() {
 	// 1. 감지할 디렉터리를 정의
 	// 2. 변경이 감지되면 실행할 task 를 지정
-	gulp.watch('./guide/**/*.html', gulp.series('html:index'));
-	gulp.watch('./src/html/**/*.html', gulp.series('html'));
-	gulp.watch('./src/js/*.js', gulp.series('js:combine'));
-	gulp.watch('./src/sass/*.scss', gulp.series('scss:compile'));
+	gulp.watch('guide/**/*.html', gulp.series('html:index'));
+	gulp.watch('src/html/**/*.html', gulp.series('html'));
+	gulp.watch('src/js/*.js', gulp.series('js:combine'));
+	gulp.watch('src/sass/*.scss', gulp.series('scss:compile'));
 })
 
 gulp.task('default', gulp.parallel('html', 'html:index', 'js:combine', 'scss:compile', 'watch', 'browserSync'));
